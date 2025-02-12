@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Farmer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold">Welcome, {{ session['username'] }}</h1>
+
+    <!-- My Products Section -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">My Products</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            {% for product in products %}
+            <div class="border rounded p-4 bg-white shadow">
+                <h3 class="font-semibold">{{ product.title }}</h3>
+                <p>{{ product.description }}</p>
+                <p class="text-sm">Quantity: {{ product.quantity }} {{ product.unit }}</p>
+                <p class="text-sm">Base Price: ₹{{ product.base_price }}</p>
+                <p class="text-sm">Quality Grade: {{ product.quality_grade }}</p>
+            </div>
+            {% else %}
+            <p>No products available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- My Auctions Section -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">My Auctions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            {% for auction in auctions %}
+            <div class="border rounded p-4 bg-white shadow">
+                <h3 class="font-semibold">{{ auction.product.title }}</h3>
+                <p>Start Time: {{ auction.start_time }}</p>
+                <p>End Time: {{ auction.end_time }}</p>
+                <p>Minimum Bid Price: ₹{{ auction.min_bid_price }}</p>
+                <p>Status: {{ auction.status }}</p>
+                {% if auction.current_highest_bid %}
+                    <p>Current Highest Bid: ₹{{ auction.current_highest_bid }}</p>
+                {% else %}
+                    <p>No bids yet</p>
+                {% endif %}
+            </div>
+            {% else %}
+            <p>No auctions available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bids Received Section -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Recent Bids</h2>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full bg-white shadow rounded">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2">Product</th>
+                        <th class="px-4 py-2">Bid Amount</th>
+                        <th class="px-4 py-2">Bidder ID</th>
+                        <th class="px-4 py-2">Bid Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bid in bids %}
+                    <tr>
+                        <td class="border px-4 py-2">{{ bid.auction.product.title }}</td>
+                        <td class="border px-4 py-2">₹{{ bid.bid_amount }}</td>
+                        <td class="border px-4 py-2">{{ bid.bidder_id }}</td>
+                        <td class="border px-4 py-2">{{ bid.bid_time }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center p-4">No bids received yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

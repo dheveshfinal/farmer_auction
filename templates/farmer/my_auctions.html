@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}My Auctions{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-semibold mb-6">My Auctions</h1>
+
+    <a href="{{ url_for('new_auction') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        Start New Auction
+    </a>
+    <!-- Active Auctions Section -->
+    <div class="mb-8 gap-4">
+        <h2 class="text-xl font-bold mb-4">Active Auctions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for auction in auctions['active'] %}
+            <div class="border rounded p-4 bg-white shadow">
+                <h3 class="font-semibold">{{ auction.product.title }}</h3>
+                <p>Start Time: {{ auction.start_time }}</p>
+                <p>End Time: {{ auction.end_time }}</p>
+                <p>Minimum Bid Price: ₹{{ auction.min_bid_price }}</p>
+                <p>Current Highest Bid: ₹{{ auction.current_highest_bid if auction.current_highest_bid else "No bids yet" }}</p>
+                <p>Current Winner: {{ auction.current_winner.full_name if auction.current_winner else "N/A" }}</p>
+                <p>Status: Active</p>
+
+                <!-- Cancel Button for Active Auctions -->
+                <form method="POST" action="{{ url_for('cancel_auction') }}">
+                    <input type="hidden" name="auction_id" value="{{ auction.auction_id }}">
+                    <button type="submit" class="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                        Cancel Auction
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <p>No active auctions.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Upcoming Auctions Section -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Upcoming Auctions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for auction in auctions['upcoming'] %}
+            <div class="border rounded p-4 bg-white shadow">
+                <h3 class="font-semibold">{{ auction.product.title }}</h3>
+                <p>Start Time: {{ auction.start_time }}</p>
+                <p>End Time: {{ auction.end_time }}</p>
+                <p>Minimum Bid Price: ₹{{ auction.min_bid_price }}</p>
+                <p>Status: Upcoming</p>
+
+                <!-- Cancel Button for Upcoming Auctions -->
+                <form method="POST" action="{{ url_for('cancel_auction') }}">
+                    <input type="hidden" name="auction_id" value="{{ auction.auction_id }}">
+                    <button type="submit" class="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                        Cancel Auction
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <p>No upcoming auctions.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <!-- Ended Auctions -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Ended Auctions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for auction in auctions['ended'] %}
+            <div class="border rounded p-4 bg-white shadow">
+                <h3 class="font-semibold">{{ auction.product.title }}</h3>
+                <p>Start Time: {{ auction.start_time }}</p>
+                <p>End Time: {{ auction.end_time }}</p>
+                <p>Minimum Bid Price: ₹{{ auction.min_bid_price }}</p>
+                <p>Winning Bid: ₹{{ auction.current_highest_bid if auction.current_highest_bid else "No bids" }}</p>
+                <p>Winner: {{ auction.current_winner.full_name if auction.current_winner else "N/A" }}</p>
+                <p>Status: Ended</p>
+            </div>
+            {% else %}
+            <p>No ended auctions.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Cancelled Auctions -->
+    <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Cancelled Auctions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for auction in auctions['cancelled'] %}
+            <div class="border rounded p-4 bg-white shadow">
+                <h3 class="font-semibold">{{ auction.product.title }}</h3>
+                <p>Start Time: {{ auction.start_time }}</p>
+                <p>End Time: {{ auction.end_time }}</p>
+                <p>Minimum Bid Price: ₹{{ auction.min_bid_price }}</p>
+                <p>Status: Cancelled</p>
+            </div>
+            {% else %}
+            <p>No cancelled auctions.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto my-8">
+    <h1 class="text-2xl font-bold mb-4">Transaction for Auction #{{ transaction.auction_id }}</h1>
+    
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-2">Auction Details</h2>
+        <p><strong>Product:</strong> {{ transaction.product_title }}</p>
+        <p><strong>Seller:</strong> {{ transaction.seller_name }}</p>
+        <p><strong>Final Bid Amount:</strong> ${{ transaction.final_amount }}</p>
+        
+        <h2 class="text-xl font-semibold mt-6 mb-2">Transaction Status</h2>
+        <p><strong>Payment Status:</strong> {{ transaction.payment_status }}</p>
+        
+        {% if transaction.payment_status == 'pending' %}
+        <form action="{{ url_for('confirm_transaction', transaction_id=transaction.transaction_id) }}" method="POST">
+            <button type="submit" class="bg-green-500 text-white font-semibold py-2 px-4 rounded mt-4">
+                Confirm Transaction
+            </button>
+        </form>
+        {% elif transaction.payment_status == 'completed' %}
+        <p class="text-green-600 font-semibold">Transaction Completed</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

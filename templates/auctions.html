@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Active Auctions</h1>
+        
+        <!-- Filter Section -->
+        <div class="flex space-x-4">
+            <select class="rounded border p-2" id="category-filter">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            
+            <select class="rounded border p-2" id="sort-filter">
+                <option value="end_time">Ending Soon</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Auctions Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for auction in auctions %}
+        <!-- Make the whole auction box clickable by wrapping it in an anchor tag -->
+        <a href="{{ url_for('auction_detail', auction_id=auction.auction_id) }}" class="block">
+            <div class="bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div class="p-4">
+                    <h2 class="font-semibold text-lg">{{ auction.product_title }}</h2>
+                    <p class="text-gray-600">{{ auction.product_description[:100] }}...</p>
+                    <div class="mt-4">
+                        <p>Farmer: {{ auction.farmer_name }}</p>
+                        <p>Current Bid: ${{ auction.current_highest_bid or auction.min_bid_price }}</p>
+                        <p>Ends: {{ auction.end_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                    </div>
+                    <div class="mt-4 text-center bg-green-500 text-white py-2 rounded">
+                        View Details
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

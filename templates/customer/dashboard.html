@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-6">
+    <h1 class="text-2xl font-bold">Welcome, {{ session['username'] }}</h1>
+    
+    <!-- Participating Auctions Summary -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Your Participating Auctions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for auction in participating_auctions %}
+            <div class="border rounded p-4">
+                <h3 class="font-semibold">
+                    <a href="{{ url_for('auction_detail', auction_id=auction.auction_id) }}" class="text-blue-600 hover:underline">
+                        {{ auction.product_title }}
+                    </a>
+                </h3>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Won Auctions -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Won Auctions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for auction in won_auctions %}
+                <div class="border rounded p-4">
+                    <h3 class="font-semibold">
+                        <a href="{{ url_for('view_transaction', transaction_id=auction['transaction_id']) }}" class="text-blue-600 hover:underline">
+                            {{ auction['product_title'] }}
+                        </a>
+                    </h3>
+                    <p>Winning Bid: ${{ auction['winning_bid'] }}</p>
+                    <p>Status: {{ auction['auction_status'] }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

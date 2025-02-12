@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="space-y-6">
+    <h1 class="text-2xl font-bold">My Bids</h1>
+    
+    <!-- Active Bids -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Active Bids</h2>
+        <div class="space-y-4">
+            {% for bid in active_bids %}
+            <div class="border rounded p-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold">{{ bid.auction.product.title }}</h3>
+                        <p>Your Bid: ${{ bid.bid_amount }}</p>
+                        <p>Current Highest: ${{ bid.auction.current_highest_bid }}</p>
+                        <p>Status: {% if bid.bid_amount == bid.auction.current_highest_bid %}Winning{% else %}Outbid{% endif %}</p>
+                    </div>
+                    <div class="text-right">
+                        <p>Ends: {{ bid.auction.end_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                        <a href="{{ url_for('auction_detail', auction_id=bid.auction.id) }}" 
+                           class="text-green-500 hover:text-green-600">View Auction</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Past Bids -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Bid History</h2>
+        <div class="space-y-4">
+            {% for bid in past_bids %}
+            <div class="border rounded p-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold">{{ bid.auction.product.title }}</h3>
+                        <p>Your Bid: ${{ bid.bid_amount }}</p>
+                        <p>Final Price: ${{ bid.auction.current_highest_bid }}</p>
+                        <p>Status: {{ bid.status }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p>Ended: {{ bid.auction.end_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                        {% if bid.status == 'won' %}
+                        <a href="{{ url_for('transaction_detail', transaction_id=bid.auction.transaction.id) }}" 
+                           class="text-green-500 hover:text-green-600">View Transaction</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

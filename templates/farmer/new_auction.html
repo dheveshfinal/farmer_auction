@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Start New Auction{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto mt-6 bg-white shadow p-6 rounded-lg">
+    <h1 class="text-2xl font-bold mb-4">Start New Auction</h1>
+    <form method="POST" action="{{ url_for('create_auction') }}">
+        <div class="mb-4">
+            <label for="product_id" class="block text-sm font-medium">Select Product</label>
+            <select name="product_id" id="product_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                {% for product in products %}
+                <option value="{{ product.product_id }}">{{ product.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="start_time" class="block text-sm font-medium">Start Time</label>
+            <input type="datetime-local" name="start_time" id="start_time" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        </div>
+
+        <div class="mb-4">
+            <label for="end_time" class="block text-sm font-medium">End Time</label>
+            <input type="datetime-local" name="end_time" id="end_time" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        </div>
+
+        <div class="mb-4">
+            <label for="min_bid_price" class="block text-sm font-medium">Minimum Bid Price</label>
+            <input type="number" step="0.01" name="min_bid_price" id="min_bid_price" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+        </div>
+
+        <button type="submit" class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">Create Auction</button>
+    </form>
+</div>
+{% endblock %}
